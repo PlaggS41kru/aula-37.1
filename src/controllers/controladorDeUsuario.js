@@ -74,6 +74,43 @@ class ControladorDeUsuario {
       res.status(500).json({ erro: error.message });
     }
   }
+
+  atualizar(req, res){
+    try {
+      const id = req.params.id;
+
+      const usuarioExistente = servicoDeUsuario.pegarPeloID(id)
+      if (usuarios.length === 0) {
+        return res
+          .status(404)
+          .json({ messagem: "Nenhum usuário foi encontrado." });
+      }
+      
+      const dadosNovos = req.body;
+
+      const usuarioAtualizado = servicoDeUsuario.atualizar(id, dadosNovos);
+
+      res.status(200).json(usuarioAtualizado)
+
+    } catch (error) {
+      res
+        .status(500)
+        .json({ erro: error.message || "Erro ao buscar usuários." });
+    }
+  }
+
+  deletar(req, res){
+    try{
+      const id = req.params.id;
+      servicoDeUsuario.deletar(id);
+
+      res.status(201).json({ message: "Deletado com sucesso!"})
+    } catch (error) {
+      res
+        .status(500)
+        .json({ erro: error.message || "Erro ao buscar usuários." });
+    }
+  }
 }
 
 module.exports = new ControladorDeUsuario();
